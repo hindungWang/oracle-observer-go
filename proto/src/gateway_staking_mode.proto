@@ -1,0 +1,10 @@
+syntax = "proto3";
+option go_package = "github.com/hindungWang/oracle-observer-go/proto/gen";
+
+package helium;
+
+enum gateway_staking_mode {
+  dataonly = 0;
+  full = 1;
+  light = 2;
+}

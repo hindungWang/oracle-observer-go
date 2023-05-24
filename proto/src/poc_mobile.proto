@@ -1,6 +1,9 @@
 syntax = "proto3";
+option go_package = "github.com/hindungWang/oracle-observer-go/proto/gen";
 
 package helium.poc_mobile;
+
+import "mapper.proto";
 
 message speedtest_req_v1 {
   bytes pub_key = 1;
@@ -51,6 +54,12 @@ message cell_heartbeat_ingest_report_v1 {
   cell_heartbeat_req_v1 report = 2;
 }
 
+// mapper attach report output by ingestor, tagged with received_timestamp
+message mapper_attach_ingest_report_v1 {
+  // timestamp in millisconds since unix epoch
+  uint64 received_timestamp = 1;
+  mapper_attach report = 2;
+}
 
 service poc_mobile {
   rpc submit_speedtest(speedtest_req_v1) returns (speedtest_resp_v1);

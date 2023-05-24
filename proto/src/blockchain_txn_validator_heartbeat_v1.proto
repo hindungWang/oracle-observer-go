@@ -1,0 +1,12 @@
+syntax = "proto3";
+option go_package = "github.com/hindungWang/oracle-observer-go/proto/gen";
+package helium;
+
+message blockchain_txn_validator_heartbeat_v1 {
+  bytes address = 1;
+  uint64 height = 2;
+  uint32 version = 3;
+  bytes signature = 4;
+  repeated bytes poc_key_proposals = 5;
+  repeated bytes reactivated_gws = 6;
+}

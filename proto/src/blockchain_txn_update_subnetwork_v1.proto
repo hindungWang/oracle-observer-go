@@ -1,0 +1,14 @@
+syntax = "proto3";
+option go_package = "github.com/hindungWang/oracle-observer-go/proto/gen";
+
+package helium;
+
+message blockchain_txn_update_subnetwork_v1 {
+  bytes subnetwork_key = 1;
+  bytes network_signature = 2;
+
+  repeated bytes reward_server_keys = 3;
+  bytes subnetwork_signature = 4;
+
+  uint64 nonce = 5;
+}

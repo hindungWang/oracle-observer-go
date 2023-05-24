@@ -1,0 +1,10 @@
+syntax = "proto3";
+option go_package = "github.com/hindungWang/oracle-observer-go/proto/gen";
+package helium;
+
+enum blockchain_token_type_v1 {
+  hnt = 0;
+  hst = 1;
+  mobile = 2;
+  iot = 3;
+}

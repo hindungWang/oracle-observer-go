@@ -1,0 +1,10 @@
+syntax = "proto3";
+option go_package = "github.com/hindungWang/oracle-observer-go/proto/gen";
+package helium;
+
+message blockchain_txn_consensus_group_v1 {
+  repeated bytes members = 1;
+  bytes proof = 2;
+  uint64 height = 3;
+  uint32 delay = 4;
+}

@@ -1,0 +1,14 @@
+syntax = "proto3";
+option go_package = "github.com/hindungWang/oracle-observer-go/proto/gen";
+package helium;
+
+message blockchain_txn_reward_v2 {
+  bytes account = 1;
+  uint64 amount = 2;
+}
+
+message blockchain_txn_rewards_v2 {
+  uint64 start_epoch = 1;
+  uint64 end_epoch = 2;
+  repeated blockchain_txn_reward_v2 rewards = 3;
+}

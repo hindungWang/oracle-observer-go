@@ -19,6 +19,8 @@ import (
 	"log"
 	"os"
 	"strings"
+
+	"github.com/hindungWang/oracle-observer-go/proto/gen"
 )
 
 func HandleLambdaEvent(event events.S3Event) error {
@@ -66,11 +68,12 @@ func HandleLambdaEvent(event events.S3Event) error {
 	switch prefix {
 	case "radio_reward_share":
 		// Obtain a message type
-		row := &RadioRewardShare{}
 		for offset := 0; offset < len(fileBytes); {
 			// the first 4 bytes tell you how long the message is
 			messageLength := int32(fileBytes[offset])<<24 | int32(fileBytes[offset+1])<<16 | int32(fileBytes[offset+2])<<8 | int32(fileBytes[offset+3])
 			bufferMessage := fileBytes[offset+4 : offset+int(messageLength)+4]
+
+			row := &gen.RadioRewardShare{}
 			if err = proto.Unmarshal(bufferMessage, row); err != nil {
 				log.Fatal(err)
 			}

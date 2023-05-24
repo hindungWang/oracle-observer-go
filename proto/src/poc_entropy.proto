@@ -1,0 +1,11 @@
+syntax = "proto3";
+option go_package = "github.com/hindungWang/oracle-observer-go/proto/gen";
+
+package helium.poc_entropy;
+
+import "entropy.proto";
+
+// request entropy
+message entropy_req_v1 {}
+
+service poc_entropy { rpc entropy(entropy_req_v1) returns (entropy_report_v1); }

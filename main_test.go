@@ -48,28 +48,28 @@ var TestCase = `{
         "sourceIPAddress": "120.230.139.90"
       },
       "responseElements": {
-        "x-amz-id-2": "c7RR5oGoSyvL0XdUuBsobnk9cnw2TDZxz/p+6lSq7S9A/iV9Wnv36krO/ekd8kb4X4ljGsHxRoOcGE/W8qc+z5O1HwN/Yz7tT6SwOgzRmGw=",
-        "x-amz-request-id": "97BZYCMVAMHDJSNE"
+        "x-amz-id-2": "xxx",
+        "x-amz-request-id": "xxx"
       },
       "s3": {
         "bucket": {
-          "arn": "arn:aws:s3:::foundation-poc-data-requester-pays-backup",
+          "arn": "xxx",
           "name": "foundation-poc-data-requester-pays-backup",
           "ownerIdentity": {
-            "principalId": "A1KNZZZ4GMSHA2"
+            "principalId": "xxx"
           }
         },
-        "configurationId": "e31b764b-db6f-440a-9364-8b1b0ee4feb6",
+        "configurationId": "xxx",
         "object": {
-          "eTag": "90f62ee1e882a49290f4fe23b793150c",
+          "eTag": "xxx",
           "key": "foundation-mobile-verified/radio_reward_share.1684373599999.gz",
-          "sequencer": "0064664C716A0563FA",
+          "sequencer": "xxx",
           "size": 358061
         },
         "s3SchemaVersion": "1.0"
       },
       "userIdentity": {
-        "principalId": "AWS:AIDAXVNYZ5KHHRMGQUJIJ"
+        "principalId": "AWS:xxx"
       }
     }
   ]
