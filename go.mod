@@ -8,6 +8,7 @@ require (
 	github.com/golang-migrate/migrate/v4 v4.15.2
 	github.com/golang/protobuf v1.5.3
 	github.com/lib/pq v1.10.9
+	google.golang.org/protobuf v1.28.2-0.20230222093303-bc1253ad3743
 	gorm.io/driver/postgres v1.0.8
 	gorm.io/gorm v1.21.4
 )
@@ -32,5 +33,4 @@ require (
 	golang.org/x/crypto v0.0.0-20210921155107-089bfa567519 // indirect
 	golang.org/x/text v0.4.0 // indirect
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
-	google.golang.org/protobuf v1.28.2-0.20230222093303-bc1253ad3743 // indirect
 )

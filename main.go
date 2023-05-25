@@ -2,13 +2,11 @@ package main
 
 import (
 	"compress/gzip"
-	"errors"
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
-	"github.com/golang-migrate/migrate/v4"
 	_ "github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 	"github.com/golang/protobuf/proto"
@@ -100,18 +98,17 @@ func main() {
 }
 
 func initDB(url string) {
-	m, err := migrate.New("file://migrations", url)
-	if err != nil {
-		log.Fatal(err)
-	}
-	if err = m.Up(); err != nil {
-		if !errors.Is(err, migrate.ErrNoChange) {
-			log.Fatal(err)
-		}
-	}
+
+	var err error
 
 	DB, err = gorm.Open(gpostgres.Open(url), &gorm.Config{})
 	if err != nil {
 		log.Fatal(err)
+	}
+
+	if !DB.Migrator().HasTable(&gen.RadioRewardShare{}) {
+		if err := DB.Migrator().CreateTable(&gen.RadioRewardShare{}); err != nil {
+			log.Fatal(err)
+		}
 	}
 }

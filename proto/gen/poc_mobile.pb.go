@@ -1170,15 +1170,15 @@ type RadioRewardShare struct {
 	// / Public key of the owner of the radio
 	OwnerKey []byte `protobuf:"bytes,1,opt,name=owner_key,json=ownerKey,proto3" json:"owner_key,omitempty"`
 	// / Public key of the hotspot of the radio
-	HotspotKey []byte `protobuf:"bytes,2,opt,name=hotspot_key,json=hotspotKey,proto3" json:"hotspot_key,omitempty"`
+	HotspotKey []byte `protobuf:"bytes,2,opt,name=hotspot_key,json=hotspotKey,proto3" json:"hotspot_key,omitempty" gorm:"primaryKey"`
 	// / cbsd Id of the radio
-	CbsdId string `protobuf:"bytes,3,opt,name=cbsd_id,json=cbsdId,proto3" json:"cbsd_id,omitempty"`
+	CbsdId string `protobuf:"bytes,3,opt,name=cbsd_id,json=cbsdId,proto3" json:"cbsd_id,omitempty" gorm:"primaryKey"`
 	// / Amount rewarded to the owner of the radio
 	Amount uint64 `protobuf:"varint,4,opt,name=amount,proto3" json:"amount,omitempty"`
 	// / Unix timestamp in seconds of the start of the reward period
 	StartEpoch uint64 `protobuf:"varint,5,opt,name=start_epoch,json=startEpoch,proto3" json:"start_epoch,omitempty"`
 	// / Unix timestamp in seconds of the end of the reward period
-	EndEpoch uint64 `protobuf:"varint,6,opt,name=end_epoch,json=endEpoch,proto3" json:"end_epoch,omitempty"`
+	EndEpoch uint64 `protobuf:"varint,6,opt,name=end_epoch,json=endEpoch,proto3" json:"end_epoch,omitempty" gorm:"primaryKey"`
 }
 
 func (x *RadioRewardShare) Reset() {
