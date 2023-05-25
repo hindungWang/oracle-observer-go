@@ -29,7 +29,7 @@ func TestHandleLambdaEvent(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if err := HandleLambdaEvent(tt.args.event); (err != nil) != tt.wantErr {
+			if err := handleLambdaEvent(tt.args.event); (err != nil) != tt.wantErr {
 				t.Errorf("HandleLambdaEvent() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})

@@ -21,7 +21,15 @@ import (
 	"github.com/hindungWang/oracle-observer-go/proto/gen"
 )
 
-func HandleLambdaEvent(event events.S3Event) error {
+var DB *gorm.DB
+
+func main() {
+	log.SetFlags(log.Lshortfile | log.LstdFlags) // set flags
+	initDB(os.Getenv("DATABASE_URL"))
+	lambda.Start(handleLambdaEvent)
+}
+
+func handleLambdaEvent(event events.S3Event) error {
 	if len(event.Records) == 0 {
 		log.Println("nil event records")
 		return nil
@@ -64,38 +72,34 @@ func HandleLambdaEvent(event events.S3Event) error {
 	prefix := strings.Split(key[i:], ".")[0]
 
 	switch prefix {
+	case "entropy":
+		handler(fileBytes, &gen.EntropyReportV1{})
 	case "radio_reward_share":
-		// Obtain a message type
-		for offset := 0; offset < len(fileBytes); {
-			// the first 4 bytes tell you how long the message is
-			messageLength := int32(fileBytes[offset])<<24 | int32(fileBytes[offset+1])<<16 | int32(fileBytes[offset+2])<<8 | int32(fileBytes[offset+3])
-			bufferMessage := fileBytes[offset+4 : offset+int(messageLength)+4]
-
-			row := &gen.RadioRewardShare{}
-			if err = proto.Unmarshal(bufferMessage, row); err != nil {
-				log.Fatal(err)
-			}
-			re := DB.Create(row)
-			if re.Error != nil {
-				log.Println(re.Error.Error())
-			}
-
-			offset += int(messageLength) + 4
-		}
-	case "gateway_reward_share":
-
+		handler(fileBytes, &gen.RadioRewardShare{})
+	default:
+		log.Println("no match handler")
 	}
 	return nil
 }
 
-var DB *gorm.DB
+func handler(body []byte, row proto.Message) {
+	// Obtain a message type
+	for offset := 0; offset < len(body); {
+		// the first 4 bytes tell you how long the message is
+		messageLength := int32(body[offset])<<24 | int32(body[offset+1])<<16 | int32(body[offset+2])<<8 | int32(body[offset+3])
+		bufferMessage := body[offset+4 : offset+int(messageLength)+4]
+		if err := proto.Unmarshal(bufferMessage, row); err != nil {
+			log.Fatal(err)
+		}
+		re := DB.Create(row)
+		if re.Error != nil {
+			log.Println(re.Error.Error())
+		}
 
-func main() {
-	log.SetFlags(log.Lshortfile | log.LstdFlags) // set flags
-	db := os.Getenv("DATABASE_URL")
-	initDB(db)
-	lambda.Start(HandleLambdaEvent)
+		offset += int(messageLength) + 4
+	}
 }
+
 
 func initDB(url string) {
 
@@ -104,6 +108,12 @@ func initDB(url string) {
 	DB, err = gorm.Open(gpostgres.Open(url), &gorm.Config{})
 	if err != nil {
 		log.Fatal(err)
+	}
+
+	if !DB.Migrator().HasTable(&gen.EntropyReportV1{}) {
+		if err := DB.Migrator().CreateTable(&gen.EntropyReportV1{}); err != nil {
+			log.Fatal(err)
+		}
 	}
 
 	if !DB.Migrator().HasTable(&gen.RadioRewardShare{}) {
