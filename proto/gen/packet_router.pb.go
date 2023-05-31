@@ -71,9 +71,9 @@ type PacketRouterPacketReportV1 struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	GatewayTmst uint64 `protobuf:"varint,1,opt,name=gateway_tmst,json=gatewayTmst,proto3" json:"gateway_tmst,omitempty"`
-	Oui         uint64 `protobuf:"varint,2,opt,name=oui,proto3" json:"oui,omitempty"`
-	NetId       uint32 `protobuf:"varint,3,opt,name=net_id,json=netId,proto3" json:"net_id,omitempty"`
+	GatewayTmst uint64 `protobuf:"varint,1,opt,name=gateway_tmst,json=gatewayTmst,proto3" json:"gateway_tmst,omitempty" gorm:"primaryKey"`
+	Oui         uint64 `protobuf:"varint,2,opt,name=oui,proto3" json:"oui,omitempty" gorm:"primaryKey"`
+	NetId       uint32 `protobuf:"varint,3,opt,name=net_id,json=netId,proto3" json:"net_id,omitempty" gorm:"primaryKey"`
 	// signal strength in dBm
 	Rssi int32 `protobuf:"zigzag32,4,opt,name=rssi,proto3" json:"rssi,omitempty"`
 	// Frequency in hz
@@ -81,7 +81,7 @@ type PacketRouterPacketReportV1 struct {
 	Snr       float32  `protobuf:"fixed32,6,opt,name=snr,proto3" json:"snr,omitempty"`
 	Datarate  DataRate `protobuf:"varint,7,opt,name=datarate,proto3,enum=helium.DataRate" json:"datarate,omitempty"`
 	Region    Region   `protobuf:"varint,8,opt,name=region,proto3,enum=helium.Region" json:"region,omitempty"`
-	Gateway   []byte   `protobuf:"bytes,9,opt,name=gateway,proto3" json:"gateway,omitempty"`
+	Gateway   []byte   `protobuf:"bytes,9,opt,name=gateway,proto3" json:"gateway,omitempty" gorm:"primaryKey"`
 	// Hash of `payload` within `message packet`
 	PayloadHash []byte                               `protobuf:"bytes,10,opt,name=payload_hash,json=payloadHash,proto3" json:"payload_hash,omitempty"`
 	PayloadSize uint32                               `protobuf:"varint,11,opt,name=payload_size,json=payloadSize,proto3" json:"payload_size,omitempty"`
