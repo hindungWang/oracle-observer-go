@@ -2,11 +2,15 @@ package main
 
 import (
 	"encoding/json"
-	"github.com/aws/aws-lambda-go/events"
-	gpostgres "gorm.io/driver/postgres"
-	"gorm.io/gorm"
 	"os"
 	"testing"
+
+	"github.com/aws/aws-lambda-go/events"
+	_ "github.com/golang-migrate/migrate/v4/database/postgres"
+	_ "github.com/golang-migrate/migrate/v4/source/file"
+	_ "github.com/lib/pq"
+	gpostgres "gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
 func TestHandleLambdaEvent(t *testing.T) {
@@ -74,3 +78,7 @@ var TestCase = `{
     }
   ]
 }`
+
+func Test_initDB(t *testing.T) {
+	initDB(os.Getenv("DATABASE_URL"))
+}

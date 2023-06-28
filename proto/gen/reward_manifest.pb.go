@@ -25,7 +25,7 @@ type RewardManifest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	WrittenFiles []string `protobuf:"bytes,1,rep,name=written_files,json=writtenFiles,proto3" json:"written_files,omitempty"`
+	WrittenFiles []string `protobuf:"bytes,1,rep,name=written_files,json=writtenFiles,proto3" json:"written_files,omitempty" gorm:"type:text"`
 	// Unix timestamp in seconds of the start of the inventory period
 	StartTimestamp uint64 `protobuf:"varint,2,opt,name=start_timestamp,json=startTimestamp,proto3" json:"start_timestamp,omitempty"`
 	// Unix timestamp in seconds of the end of the inventory period

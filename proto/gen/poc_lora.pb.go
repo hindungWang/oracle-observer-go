@@ -1146,9 +1146,9 @@ type LoraPocV1 struct {
 	unknownFields protoimpl.UnknownFields
 
 	PocId               []byte                         `protobuf:"bytes,1,opt,name=poc_id,json=pocId,proto3" json:"poc_id,omitempty"`
-	BeaconReport        *LoraValidBeaconReportV1       `protobuf:"bytes,2,opt,name=beacon_report,json=beaconReport,proto3" json:"beacon_report,omitempty"`
-	SelectedWitnesses   []*LoraVerifiedWitnessReportV1 `protobuf:"bytes,3,rep,name=selected_witnesses,json=selectedWitnesses,proto3" json:"selected_witnesses,omitempty"`
-	UnselectedWitnesses []*LoraVerifiedWitnessReportV1 `protobuf:"bytes,4,rep,name=unselected_witnesses,json=unselectedWitnesses,proto3" json:"unselected_witnesses,omitempty"`
+	BeaconReport        *LoraValidBeaconReportV1       `protobuf:"bytes,2,opt,name=beacon_report,json=beaconReport,proto3" json:"beacon_report,omitempty"  gorm:"type:json"`
+	SelectedWitnesses   []*LoraVerifiedWitnessReportV1 `protobuf:"bytes,3,rep,name=selected_witnesses,json=selectedWitnesses,proto3" json:"selected_witnesses,omitempty" gorm:"type:json"`
+	UnselectedWitnesses []*LoraVerifiedWitnessReportV1 `protobuf:"bytes,4,rep,name=unselected_witnesses,json=unselectedWitnesses,proto3" json:"unselected_witnesses,omitempty" gorm:"type:json"`
 }
 
 func (x *LoraPocV1) Reset() {

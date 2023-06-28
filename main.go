@@ -25,7 +25,11 @@ var DB *gorm.DB
 
 func main() {
 	log.SetFlags(log.Lshortfile | log.LstdFlags) // set flags
-	initDB(os.Getenv("DATABASE_URL"))
+	var err error
+	DB, err = gorm.Open(gpostgres.Open(os.Getenv("DATABASE_URL")), &gorm.Config{})
+	if err != nil {
+		log.Fatal(err)
+	}
 	lambda.Start(handleLambdaEvent)
 }
 
@@ -84,16 +88,16 @@ func handleLambdaEvent(event events.S3Event) error {
 		handler(fileBytes, &gen.PacketRouterPacketReportV1{})
 	//case "iot_reward_share":
 	//	handler(fileBytes, &gen.IotRewardShare{})
-	//case "iot_poc":
-	//	handler(fileBytes, &gen.IotPoc{})
+	case "iot_poc":
+		handler(fileBytes, &gen.LoraPocV1{})
 	//case "iot_invalid_beacon":
 	//	handler(fileBytes, &gen.IotInvalidBeacon{})
 	//case "iot_invalid_witness":
 	//	handler(fileBytes, &gen.IotInvalidWitness{})
 	//case "gateway_reward_share":
 	//	handler(fileBytes, &gen.GatewayRewardShare{})
-	//case "reward_manifest":
-	//	handler(fileBytes, &gen.RewardManifest{})
+	case "reward_manifest":
+		handler(fileBytes, &gen.RewardManifest{})
 	//case "heartbeat_report":
 	//	handler(fileBytes, &gen.CellHeartbeatIngestReportV1{})
 	//case "speedtest_report":
@@ -134,85 +138,92 @@ func initDB(url string) {
 
 	var err error
 
-	DB, err = gorm.Open(gpostgres.Open(url), &gorm.Config{})
+	db, err := gorm.Open(gpostgres.Open(url), &gorm.Config{})
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	//if !DB.Migrator().HasTable(&gen.EntropyReportV1{}) {
-	//	if err := DB.Migrator().CreateTable(&gen.EntropyReportV1{}); err != nil {
+	//if !db.Migrator().HasTable(&gen.EntropyReportV1{}) {
+	//	if err := db.Migrator().CreateTable(&gen.EntropyReportV1{}); err != nil {
 	//		log.Fatal(err)
 	//	}
 	//}
 	//
-	//if !DB.Migrator().HasTable(&gen.RadioRewardShare{}) {
-	//	if err := DB.Migrator().CreateTable(&gen.RadioRewardShare{}); err != nil {
+	//if !db.Migrator().HasTable(&gen.RadioRewardShare{}) {
+	//	if err := db.Migrator().CreateTable(&gen.RadioRewardShare{}); err != nil {
 	//		log.Fatal(err)
 	//	}
 	//}
 	//
-	//if !DB.Migrator().HasTable(&gen.LoraBeaconIngestReportV1{}) {
-	//	if err := DB.Migrator().CreateTable(&gen.LoraBeaconIngestReportV1{}); err != nil {
+	//if !db.Migrator().HasTable(&gen.LoraBeaconIngestReportV1{}) {
+	//	if err := db.Migrator().CreateTable(&gen.LoraBeaconIngestReportV1{}); err != nil {
 	//		log.Fatal(err)
 	//	}
 	//}
 	//
-	//if !DB.Migrator().HasTable(&gen.LoraWitnessIngestReportV1{}) {
-	//	if err := DB.Migrator().CreateTable(&gen.LoraWitnessIngestReportV1{}); err != nil {
+	//if !db.Migrator().HasTable(&gen.LoraWitnessIngestReportV1{}) {
+	//	if err := db.Migrator().CreateTable(&gen.LoraWitnessIngestReportV1{}); err != nil {
 	//		log.Fatal(err)
 	//	}
 	//}
 
-	if !DB.Migrator().HasTable(&gen.PacketRouterPacketReportV1{}) {
-		if err := DB.Migrator().CreateTable(&gen.PacketRouterPacketReportV1{}); err != nil {
+	if !db.Migrator().HasTable(&gen.PacketRouterPacketReportV1{}) {
+		if err := db.Migrator().CreateTable(&gen.PacketRouterPacketReportV1{}); err != nil {
 			log.Fatal(err)
 		}
 	}
 
-	//if !DB.Migrator().HasTable(&gen.IotRewardShare{}) {
-	//	if err := DB.Migrator().CreateTable(&gen.IotRewardShare{}); err != nil {
+	if !db.Migrator().HasTable(&gen.LoraPocV1{}) {
+		if err := db.Migrator().CreateTable(&gen.LoraPocV1{}); err != nil {
+			log.Fatal(err)
+		}
+	}
+
+
+	//if !db.Migrator().HasTable(&gen.IotRewardShare{}) {
+	//	if err := db.Migrator().CreateTable(&gen.IotRewardShare{}); err != nil {
 	//		log.Fatal(err)
 	//	}
 	//}
 	//
-	//if !DB.Migrator().HasTable(&gen.RewardManifest{}) {
-	//	if err := DB.Migrator().CreateTable(&gen.RewardManifest{}); err != nil {
+	if !db.Migrator().HasTable(&gen.RewardManifest{}) {
+		if err := db.Migrator().CreateTable(&gen.RewardManifest{}); err != nil {
+			log.Fatal(err)
+		}
+	}
+	//
+	//if !db.Migrator().HasTable(&gen.CellHeartbeatIngestReportV1{}) {
+	//	if err := db.Migrator().CreateTable(&gen.CellHeartbeatIngestReportV1{}); err != nil {
 	//		log.Fatal(err)
 	//	}
 	//}
 	//
-	//if !DB.Migrator().HasTable(&gen.CellHeartbeatIngestReportV1{}) {
-	//	if err := DB.Migrator().CreateTable(&gen.CellHeartbeatIngestReportV1{}); err != nil {
-	//		log.Fatal(err)
-	//	}
-	//}
-	//
-	//if !DB.Migrator().HasTable(&gen.SpeedtestIngestReportV1{}) {
-	//	if err := DB.Migrator().CreateTable(&gen.SpeedtestIngestReportV1{}); err != nil {
+	//if !db.Migrator().HasTable(&gen.SpeedtestIngestReportV1{}) {
+	//	if err := db.Migrator().CreateTable(&gen.SpeedtestIngestReportV1{}); err != nil {
 	//		log.Fatal(err)
 	//	}
 	//}
 
-	//if !DB.Migrator().HasTable(&gen.DataTransferSessionIngestReportV1{}) {
-	//	if err := DB.Migrator().CreateTable(&gen.DataTransferSessionIngestReportV1{}); err != nil {
+	//if !db.Migrator().HasTable(&gen.DataTransferSessionIngestReportV1{}) {
+	//	if err := db.Migrator().CreateTable(&gen.DataTransferSessionIngestReportV1{}); err != nil {
 	//		log.Fatal(err)
 	//	}
 	//}
 	//
-	//if !DB.Migrator().HasTable(&gen.Heartbeat{}) {
-	//	if err := DB.Migrator().CreateTable(&gen.Heartbeat{}); err != nil {
+	//if !db.Migrator().HasTable(&gen.Heartbeat{}) {
+	//	if err := db.Migrator().CreateTable(&gen.Heartbeat{}); err != nil {
 	//		log.Fatal(err)
 	//	}
 	//}
 	//
-	//if !DB.Migrator().HasTable(&gen.SpeedtestAvg{}) {
-	//	if err := DB.Migrator().CreateTable(&gen.SpeedtestAvg{}); err != nil {
+	//if !db.Migrator().HasTable(&gen.SpeedtestAvg{}) {
+	//	if err := db.Migrator().CreateTable(&gen.SpeedtestAvg{}); err != nil {
 	//		log.Fatal(err)
 	//	}
 	//}
 	//
-	//if !DB.Migrator().HasTable(&gen.MobileRewardShare{}) {
-	//	if err := DB.Migrator().CreateTable(&gen.MobileRewardShare{}); err != nil {
+	//if !db.Migrator().HasTable(&gen.MobileRewardShare{}) {
+	//	if err := db.Migrator().CreateTable(&gen.MobileRewardShare{}); err != nil {
 	//		log.Fatal(err)
 	//	}
 	//}
